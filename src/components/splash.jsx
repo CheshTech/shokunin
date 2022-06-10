@@ -1,5 +1,6 @@
 import React, { Fragment } from "react";
 import styled from "styled-components";
+import * as styles from "./splash.module.css";
 import {
   Title,
   Column,
@@ -10,8 +11,8 @@ import {
   Subtitle
 } from "../theme/index";
 import { Responsive, Colors } from "../theme/styles";
-import { graphql, useStaticQuery } from "gatsby";
-import { getImage, StaticImage } from "gatsby-plugin-image";
+import { graphql, useStaticQuery, Link } from "gatsby";
+import { getImage, GatsbyImage, StaticImage } from "gatsby-plugin-image";
 import { BgImage } from "gbimage-bridge";
 
 const StyledImg = styled(BgImage)`
@@ -59,9 +60,10 @@ const StyledTitle = styled(Title)`
   ${Responsive.sm`
 font-size: 30px;
 text-transform: uppercase;
-text-align: center;
+text-align: ${props => props.textalign || "center"};
 letter-spacing: 8.8px;
 margin: 0;
+width: ${props => props.width};
 color: ${Colors.white};
 `}
   ${Responsive.lg`
@@ -83,7 +85,7 @@ const ButtonRow = styled(Row)`
 
 const StyledText = styled(Text)`
   ${Responsive.sm`
-  width: 60%;
+  width: ${props => props.width || "60%"};
   margin-top: 10px;
   color: ${Colors.white};
   text-align: left;
@@ -91,7 +93,7 @@ const StyledText = styled(Text)`
                                                 
 `}
   ${Responsive.lg`
-  width: 30%;
+  width: ${props => props.width || "30%"};
 `}
 `;
 
@@ -108,23 +110,40 @@ font-size: 32px;
 `;
 
 export const HeroSplash = ({ title, type, subtitle, btnText, text }) => {
-  const { placeholderImage } = useStaticQuery(
-    graphql`
-      query {
-        placeholderImage: file(relativePath: { eq: "splashhero.jpg" }) {
-          childImageSharp {
-            gatsbyImageData(placeholder: BLURRED, formats: [AUTO, WEBP])
-          }
+  const heroData = useStaticQuery(graphql`
+    query {
+      contentfulHeroComponent {
+        title
+        subtitle
+        shokuninSymbol {
+          gatsbyImageData
+        }
+        backgroundImage {
+          gatsbyImageData
         }
       }
-    `
-  );
+    }
+  `);
 
-  const pluginImage = getImage(placeholderImage);
+  // const { placeholderImage } = useStaticQuery(
+  //   graphql`
+  //     query {
+  //       placeholderImage: file(relativePath: { eq: "splashhero.jpg" }) {
+  //         childImageSharp {
+  //           gatsbyImageData(placeholder: BLURRED, formats: [AUTO, WEBP])
+  //         }
+  //       }
+  //     }
+  //   `
+  // );
+
+  const pluginImage = getImage(
+    heroData.contentfulHeroComponent.backgroundImage.gatsbyImageData
+  );
 
   return (
     <Fragment>
-      {type !== "blog" && (
+      {type !== "blog" && type !== "blogArticle" && (
         <StyledImg
           image={pluginImage}
           type={type}
@@ -133,24 +152,32 @@ export const HeroSplash = ({ title, type, subtitle, btnText, text }) => {
         >
           <Container>
             <StyledColumn>
-              <StaticImage
-                src="../images/shokuninsymboltransparent.png"
+              <GatsbyImage
+                image={getImage(
+                  heroData.contentfulHeroComponent.shokuninSymbol
+                    .gatsbyImageData
+                )}
                 alt="Health without apologies"
                 placeholder="blurred"
-                style={{
-                  width: "150px",
-                  height: "75px",
-                  top: "16px",
-                  left: "275px"
-                }}
+                className={styles.symbol}
+                // style={{
+                //   width: "150px",
+                //   height: "75px",
+                //   top: "16px",
+                //   left: "275px"
+                // }}
               />
 
-              <StyledTitle splash>{title}</StyledTitle>
-              <StyledText white margin="10px 0 0 0" width="30%">
-                {subtitle}
+              <StyledTitle splash>
+                {heroData.contentfulHeroComponent.title}
+              </StyledTitle>
+              <StyledText white margin="10px 0 0 0" width="60%">
+                {heroData.contentfulHeroComponent.subtitle}
               </StyledText>
               <ButtonRow>
-                <Button>{text}</Button>
+                <Link to="/contact" style={{ textDecoration: "none" }}>
+                  <Button>{text}</Button>
+                </Link>
               </ButtonRow>
             </StyledColumn>
           </Container>
@@ -173,16 +200,31 @@ export const HeroSplash = ({ title, type, subtitle, btnText, text }) => {
                   src="../images/shokuninsymboltransparent.png"
                   alt="Health without apologies"
                   placeholder="blurred"
-                  style={{
-                    width: "150px",
-                    height: "75px",
-                    top: "16px",
-                    left: "275px"
-                  }}
+                  className={styles.symbol}
+                  style={{ marginTop: "40px" }}
                 />
               </Row>
               <StyledTitle splash>{title}</StyledTitle>
               <StyledText white margin="10px 0 0 0" width="30%">
+                {subtitle}
+              </StyledText>
+            </StyledColumn>
+          </Container>
+        </StyledImg>
+      )}
+      {type === "blogArticle" && (
+        <StyledImg
+          image={pluginImage}
+          type={type}
+          id="home"
+          preserveStackingContext={true}
+        >
+          <Container>
+            <StyledColumn>
+              <StyledTitle textalign="left" splash>
+                {title}
+              </StyledTitle>
+              <StyledText white margin="10px 0 0 0" width="80%">
                 {subtitle}
               </StyledText>
             </StyledColumn>

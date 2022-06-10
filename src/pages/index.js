@@ -24,12 +24,7 @@ const Wrapper = styled.div`
 const IndexPage = () => (
   <Layout>
     <Seo title="Home" />
-    <HeroSplash
-      title="Shokunin"
-      subtitle="Literature, Wine, Dining, and Behaviorial Economics"
-      btnText="Book Class"
-      text="Get in contact"
-    />
+    <HeroSplash text="Get in contact" />
     <AboutSection />
     <Wrapper>
       <Video />

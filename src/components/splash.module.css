@@ -1,0 +1,19 @@
+@media screen and (min-width: 1025px) {
+  .symbol {
+    width: 150px;
+    height: 75px;
+    top: 175px;
+    left: 475px;
+    /* top: 236px;
+    left: 475px; */
+    position: fixed;
+  }
+}
+@media screen and (max-width: 1024px) {
+  .symbol {
+    width: 100px;
+    height: 55px;
+    top: 2px;
+    left: 100px;
+  }
+}

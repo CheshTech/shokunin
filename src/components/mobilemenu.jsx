@@ -43,18 +43,19 @@ export const MobileMenu = ({ open }) => {
       <Link to="/" style={{ textDecoration: "none" }}>
         <StyledText white>Home</StyledText>
       </Link>
-      <Link to="/" style={{ textDecoration: "none" }}>
-        {" "}
-        <StyledText white>About</StyledText>
-      </Link>
-      <Link to="/" style={{ textDecoration: "none" }}>
+
+      <Link to="/blog" style={{ textDecoration: "none" }}>
         {" "}
         <StyledText white>Blog</StyledText>
       </Link>
-      <Link to="/" style={{ textDecoration: "none" }}>
+      <Link to="/contact" style={{ textDecoration: "none" }}>
         {" "}
         <StyledText white>Contact</StyledText>
       </Link>
     </StyledMenu>
   );
 };
+// <Link to="/" style={{ textDecoration: "none" }}>
+//   {" "}
+//   <StyledText white>About</StyledText>
+// </Link>

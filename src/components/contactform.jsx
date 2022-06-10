@@ -24,6 +24,8 @@ const FormWrapper = styled.div`
 //   border: 2px solid ${Colors.lightBlue};
   padding-top: ${props => props.paddingtop || "48px"};
   padding-bottom: 48px;
+  padding-right: ${props => props.paddingright || "0px"};
+  padding-left: ${props => props.paddingleft || "0px"};
   background-color: ${props => props.background || `${Colors.white}`};
 box-shadow: ${props => props.boxshadow || `0px 3px 8px ${Colors.blue}`};
 border-radius: 10px;
@@ -192,7 +194,9 @@ export const ContactForm = ({
   inputcolor,
   inputborder,
   paddingtop,
-  inputbackground
+  inputbackground,
+  paddingright,
+  paddingleft
 }) => {
   const [isChecked, setIsChecked] = useState(true);
 
@@ -207,203 +211,203 @@ export const ContactForm = ({
   };
 
   return (
-    <div>
-      <Formik
-        enableReinitialize
-        initialValues={{
-          email: "",
-          name: "",
-          phoneNumber: "",
-          message: ""
-        }}
-        validationSchema={yup.object().shape({
-          email: yup.string().required("Email Required"),
-          name: yup.string().required("First Name Required"),
-          phoneNumber: yup.string(),
-          message: yup.string()
-        })}
-        onSubmit={(values, { setErrors, setSubmitting, setStatus }) => {
-          fetch("/?no-cache=1", {
-            method: "POST",
-            headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            body: encode({
-              "form-name": "contact",
-              ...values
-            })
+    <Formik
+      enableReinitialize
+      initialValues={{
+        email: "",
+        name: "",
+        phoneNumber: "",
+        message: ""
+      }}
+      validationSchema={yup.object().shape({
+        email: yup.string().required("Email Required"),
+        name: yup.string().required("First Name Required"),
+        phoneNumber: yup.string(),
+        message: yup.string()
+      })}
+      onSubmit={(values, { setErrors, setSubmitting, setStatus }) => {
+        fetch("/?no-cache=1", {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: encode({
+            "form-name": "contact",
+            ...values
           })
-            .then(() => {
-              if (isChecked === true) {
-                addToMailchimp(values.email, {
-                  FNAME: values.name,
-                  PHONE: values.phoneNumber
-                }).then(data => {
-                  if (data.result === "error") {
-                    setErrors({ msg: "Error submitting your inquiry" });
-                    setSubmitting(false);
-                  } else {
-                    setStatus({
-                      success:
-                        "Success! Thanks for your inquiry and signing up for the CheshTech Newsletter! Expect an email shortly."
-                    });
-                    setSubmitting(false);
-                  }
-                });
-              } else if (isChecked === false) {
-                setStatus({
-                  success:
-                    "Thanks for contacting CheshTech! We'll get back to you as soon as possible."
-                });
-                setSubmitting(false);
-              } else {
-                setErrors({
-                  submitErr:
-                    "Error. Please make sure required fields are filled out correctly."
-                });
-                setSubmitting(false);
-              }
-            })
-            .catch(err => {
-              setErrors({ submitErr: "Network error. Please try again" });
-            });
-        }}
-      >
-        {({
-          handleChange,
-          handleSubmit,
-          submitForm,
-          status,
-          handleBlur,
-          values,
-          errors,
-          touched
-        }) => (
-          <FormWrapper
-            width={width}
-            background={background}
-            boxshadow={boxshadow}
-            paddingtop={paddingtop}
+        })
+          .then(() => {
+            if (isChecked === true) {
+              addToMailchimp(values.email, {
+                FNAME: values.name,
+                PHONE: values.phoneNumber
+              }).then(data => {
+                if (data.result === "error") {
+                  setErrors({ msg: "Error submitting your inquiry" });
+                  setSubmitting(false);
+                } else {
+                  setStatus({
+                    success:
+                      "Success! Thanks for your inquiry and signing up for the CheshTech Newsletter! Expect an email shortly."
+                  });
+                  setSubmitting(false);
+                }
+              });
+            } else if (isChecked === false) {
+              setStatus({
+                success:
+                  "Thanks for contacting CheshTech! We'll get back to you as soon as possible."
+              });
+              setSubmitting(false);
+            } else {
+              setErrors({
+                submitErr:
+                  "Error. Please make sure required fields are filled out correctly."
+              });
+              setSubmitting(false);
+            }
+          })
+          .catch(err => {
+            setErrors({ submitErr: "Network error. Please try again" });
+          });
+      }}
+    >
+      {({
+        handleChange,
+        handleSubmit,
+        submitForm,
+        status,
+        handleBlur,
+        values,
+        errors,
+        touched
+      }) => (
+        <FormWrapper
+          width={width}
+          background={background}
+          boxshadow={boxshadow}
+          paddingtop={paddingtop}
+          paddingright={paddingright}
+          paddingleft={paddingleft}
+        >
+          <Form
+            id="email-capture"
+            onSubmit={handleSubmit}
+            name="contact"
+            data-netlify="true"
+            data-netlify-honeypot="bot-field"
           >
-            <Form
-              id="email-capture"
-              onSubmit={handleSubmit}
-              name="contact"
-              data-netlify="true"
-              data-netlify-honeypot="bot-field"
-            >
-              <input type="hidden" name="form-name" value="contact" />
-              <p hidden>
-                <label>
-                  Don’t fill this out: <input name="bot-field" />
+            <input type="hidden" name="form-name" value="contact" />
+            <p hidden>
+              <label>
+                Don’t fill this out: <input name="bot-field" />
+              </label>
+            </p>
+            <div>
+              <StyledText color={color}>
+                Contact me, <em>today</em>
+              </StyledText>
+              <Grid>
+                <Label color={color}>
+                  {errors.name && touched.name
+                    ? "Please fill out first name"
+                    : "First Name"}
+                  <StyledInput
+                    inputbackground={inputbackground}
+                    inputcolor={inputcolor}
+                    color={color}
+                    inputborder={inputborder}
+                    placeholder="First Name"
+                    onChange={handleChange}
+                    value={values.name}
+                    onBlur={handleBlur}
+                    name="name"
+                    error={touched.name && errors.name}
+                    required
+                  />
+                </Label>
+                <Label color={color}>
+                  {errors.email && touched.email
+                    ? "Please make sure email is filled out"
+                    : "Email"}
+                  <StyledInput
+                    inputbackground={inputbackground}
+                    inputcolor={inputcolor}
+                    inputborder={inputborder}
+                    color={color}
+                    placeholder="Email"
+                    name="email"
+                    type="email"
+                    value={values.email}
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    error={touched.email && errors.email}
+                    required
+                  />
+                </Label>
+              </Grid>
+            </div>
+            <Label color={color}>
+              Message
+              <Textarea
+                placeholder="Message"
+                color={color}
+                border={border}
+                inputborder={inputborder}
+                name="message"
+                value={values.message}
+                onChange={handleChange}
+                inputbackground={inputbackground}
+                inputcolor={inputcolor}
+              ></Textarea>
+            </Label>
+            <Row margin="5px">
+              <Checkbox>
+                <label className="checkbox-label">
+                  <input
+                    name="newsletter"
+                    onChange={toggleChange}
+                    checked={isChecked}
+                    type="checkbox"
+                  />
+                  <span className="checkbox-custom"></span>
                 </label>
-              </p>
-              <div>
-                <StyledText color={color}>
-                  Contact us, <em>today</em>
-                </StyledText>
-                <Grid>
-                  <Label color={color}>
-                    {errors.name && touched.name
-                      ? "Please fill out first name"
-                      : "First Name"}
-                    <StyledInput
-                      inputbackground={inputbackground}
-                      inputcolor={inputcolor}
-                      color={color}
-                      inputborder={inputborder}
-                      placeholder="First Name"
-                      onChange={handleChange}
-                      value={values.name}
-                      onBlur={handleBlur}
-                      name="name"
-                      error={touched.name && errors.name}
-                      required
-                    />
-                  </Label>
-                  <Label color={color}>
-                    {errors.email && touched.email
-                      ? "Please make sure email is filled out"
-                      : "Email"}
-                    <StyledInput
-                      inputbackground={inputbackground}
-                      inputcolor={inputcolor}
-                      inputborder={inputborder}
-                      color={color}
-                      placeholder="Email"
-                      name="email"
-                      type="email"
-                      value={values.email}
-                      onBlur={handleBlur}
-                      onChange={handleChange}
-                      error={touched.email && errors.email}
-                      required
-                    />
-                  </Label>
-                </Grid>
-              </div>
-              <Label color={color}>
-                Message
-                <Textarea
-                  placeholder="Message"
-                  color={color}
-                  border={border}
-                  inputborder={inputborder}
-                  name="message"
-                  value={values.message}
-                  onChange={handleChange}
-                  inputbackground={inputbackground}
-                  inputcolor={inputcolor}
-                ></Textarea>
-              </Label>
-              <Row margin="5px">
-                <Checkbox>
-                  <label className="checkbox-label">
-                    <input
-                      name="newsletter"
-                      onChange={toggleChange}
-                      checked={isChecked}
-                      type="checkbox"
-                    />
-                    <span className="checkbox-custom"></span>
-                  </label>
-                </Checkbox>
-                <NewsletterText small color={color}>
-                  Sign up for the Shokunin Newsletter!
-                </NewsletterText>
-              </Row>
-              <div>
-                <Text style={{ width: "90%" }}>
-                  {
-                    (errors =
-                      errors.email && touched.email
-                        ? errors.submitErr
-                        : errors.name
-                        ? errors.submitErr
-                        : errors.submitErr
-                        ? errors.submitErr
-                        : errors.msg
-                        ? errors.msg
-                        : null)
-                  }
-                  {status && isChecked
-                    ? status.success
-                    : status
-                    ? status.success
-                    : null}
-                </Text>
-              </div>
-              <Column width="100%" alignitems="flex-end" margin="10px 0 0 0">
-                <StyledButton
-                  type="submit"
-                  className="cta-btn cta-btn--form"
-                  border={border}
-                >
-                  Submit
-                </StyledButton>
-              </Column>
-            </Form>
-          </FormWrapper>
-        )}
-      </Formik>
-    </div>
+              </Checkbox>
+              <NewsletterText small color={color}>
+                Sign up for the Shokunin Newsletter!
+              </NewsletterText>
+            </Row>
+            <div>
+              <Text style={{ width: "90%" }}>
+                {
+                  (errors =
+                    errors.email && touched.email
+                      ? errors.submitErr
+                      : errors.name
+                      ? errors.submitErr
+                      : errors.submitErr
+                      ? errors.submitErr
+                      : errors.msg
+                      ? errors.msg
+                      : null)
+                }
+                {status && isChecked
+                  ? status.success
+                  : status
+                  ? status.success
+                  : null}
+              </Text>
+            </div>
+            <Column width="100%" alignitems="flex-end" margin="10px 0 0 0">
+              <StyledButton
+                type="submit"
+                className="cta-btn cta-btn--form"
+                border={border}
+              >
+                Submit
+              </StyledButton>
+            </Column>
+          </Form>
+        </FormWrapper>
+      )}
+    </Formik>
   );
 };

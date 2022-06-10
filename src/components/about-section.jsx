@@ -10,7 +10,8 @@ import {
 } from "../theme/index";
 import { Colors, Responsive } from "../theme/styles";
 import { BsPencilSquare, BsPencil, BsEnvelope } from "react-icons/bs";
-import { StaticImage } from "gatsby-plugin-image";
+import { graphql, useStaticQuery } from "gatsby";
+import { getImage, GatsbyImage, StaticImage } from "gatsby-plugin-image";
 
 const Grid = styled.div`
   ${Responsive.sm`
@@ -82,9 +83,25 @@ const MobileColumn = styled.div`
 `;
 
 export const AboutSection = () => {
-  const data = [
+  const data = useStaticQuery(graphql`
+    query {
+      contentfulAbout {
+        title
+        subtitle
+        service1
+        service2
+        service3
+        description
+        aboutImage {
+          gatsbyImageData
+        }
+      }
+    }
+  `);
+
+  const info = [
     {
-      text: "Blogging",
+      text: data.contentfulAbout.service,
       icon: <BsPencilSquare size={34} />,
       red: false
     },
@@ -107,51 +124,46 @@ export const AboutSection = () => {
           <Grid>
             <Column alignitems="flex-start">
               <Text large margin="0 0 10px 0">
-                About Shokunin
+                {data.contentfulAbout.title}
               </Text>
               <Subtitle textAlign="left">
-                Catchy subtitle that captures attention goes here.
+                {data.contentfulAbout.subtitle}
               </Subtitle>
-              <Text small>
-                THis is where you describe yourself and Shokunin and what it
-                means to attract and intrigue website visitors. THis is where
-                you describe yourself and Shokunin and what it means to attract
-                and intrigue website visitors.
-              </Text>
+              <Text small>{data.contentfulAbout.description}</Text>
               <Row>
-                {data.map((key, index) => {
-                  return (
-                    <Fragment>
-                      {key.red === true ? (
-                        <Box key={index} red>
-                          <Column alignitems="center">
-                            {key.icon}
-                            <Text margin="8px 0 0 0" textAlign="center">
-                              {key.text}
-                            </Text>
-                          </Column>
-                        </Box>
-                      ) : (
-                        <Box key={index}>
-                          <Column alignitems="center">
-                            {key.icon}
-                            <Text margin="8px 0 0 0" textAlign="center">
-                              {key.text}
-                            </Text>
-                          </Column>
-                        </Box>
-                      )}
-                    </Fragment>
-                  );
-                })}
+                <Box>
+                  <Column alignitems="center">
+                    <BsPencilSquare size={34} />
+                    <Text margin="8px 0 0 0" textAlign="center">
+                      {data.contentfulAbout.service1}
+                    </Text>
+                  </Column>
+                </Box>
+                <Box red>
+                  <Column alignitems="center">
+                    <BsPencil size={34} />
+                    <Text margin="8px 0 0 0" textAlign="center">
+                      {data.contentfulAbout.service2}
+                    </Text>
+                  </Column>
+                </Box>
+                <Box>
+                  <Column alignitems="center">
+                    <BsEnvelope size={34} />
+                    <Text margin="8px 0 0 0" textAlign="center">
+                      {data.contentfulAbout.service3}
+                    </Text>
+                  </Column>
+                </Box>
               </Row>
             </Column>
-            <Column width="40%" margin="0 auto">
-              <StaticImage
-                src="../images/manwork.jpg"
+            <Column width="50%" margin="0 auto">
+              <GatsbyImage
+                image={getImage(
+                  data.contentfulAbout.aboutImage.gatsbyImageData
+                )}
                 alt="Health without apologies"
                 placeholder="blurred"
-                style={{ borderRadius: "10px" }}
               />
             </Column>
           </Grid>
@@ -167,16 +179,14 @@ export const AboutSection = () => {
       <MobileWrapper>
         <Container>
           <MobileColumn margin="0 0 20px 0">
-            <StyledText margin="0 0 10px 0">About Shokunin</StyledText>
-            <Subtitle textAlign="left">
-              Catchy subtitle that captures attention goes here.
-            </Subtitle>
-            <StyledText>
-              THis is where you describe yourself and Shokunin and what it means
-              to attract and intrigue website visitors. THis is where you
-              describe yourself and Shokunin and what it means to attract and
-              intrigue website visitors.
+            <StyledText margin="0 0 10px 0">
+              {" "}
+              {data.contentfulAbout.title}
             </StyledText>
+            <Subtitle textAlign="left">
+              {data.contentfulAbout.subtitle}
+            </Subtitle>
+            <StyledText>{data.contentfulAbout.description}</StyledText>
             <Column width="75%" margin="40px auto 0 auto">
               <StaticImage
                 src="../images/manwork.jpg"
@@ -187,31 +197,30 @@ export const AboutSection = () => {
             </Column>
           </MobileColumn>
           <Row alignitems="center" justifycontent="space-between">
-            {data.map((key, index) => {
-              return (
-                <Fragment>
-                  {key.red === true ? (
-                    <Box key={index} red>
-                      <Column alignitems="center">
-                        {key.icon}
-                        <Text margin="8px 0 0 0" textAlign="center">
-                          {key.text}
-                        </Text>
-                      </Column>
-                    </Box>
-                  ) : (
-                    <Box key={index}>
-                      <Column alignitems="center">
-                        {key.icon}
-                        <Text margin="8px 0 0 0" textAlign="center">
-                          {key.text}
-                        </Text>
-                      </Column>
-                    </Box>
-                  )}
-                </Fragment>
-              );
-            })}
+            <Box>
+              <Column alignitems="center">
+                <BsPencilSquare size={34} />
+                <Text margin="8px 0 0 0" textAlign="center">
+                  {data.contentfulAbout.service1}
+                </Text>
+              </Column>
+            </Box>
+            <Box red>
+              <Column alignitems="center">
+                <BsPencil size={34} />
+                <Text margin="8px 0 0 0" textAlign="center">
+                  {data.contentfulAbout.service2}
+                </Text>
+              </Column>
+            </Box>
+            <Box>
+              <Column alignitems="center">
+                <BsEnvelope size={34} />
+                <Text margin="8px 0 0 0" textAlign="center">
+                  {data.contentfulAbout.service3}
+                </Text>
+              </Column>
+            </Box>
           </Row>
         </Container>
         <Column width="100%">
@@ -225,3 +234,54 @@ export const AboutSection = () => {
     </Fragment>
   );
 };
+// {info.map((key, index) => {
+//   return (
+//     <Fragment>
+//       {key.red === true ? (
+//         <Box key={index} red>
+//           <Column alignitems="center">
+//             {key.icon}
+//             <Text margin="8px 0 0 0" textAlign="center">
+//               {key.text}
+//             </Text>
+//           </Column>
+//         </Box>
+//       ) : (
+//         <Box key={index}>
+//           <Column alignitems="center">
+//             {key.icon}
+//             <Text margin="8px 0 0 0" textAlign="center">
+//               {key.text}
+//             </Text>
+//           </Column>
+//         </Box>
+//       )}
+//     </Fragment>
+//   );
+// })}
+
+// {data.map((key, index) => {
+//   return (
+//     <Fragment>
+//       {key.red === true ? (
+//         <Box key={index} red>
+//           <Column alignitems="center">
+//             {key.icon}
+//             <Text margin="8px 0 0 0" textAlign="center">
+//               {key.text}
+//             </Text>
+//           </Column>
+//         </Box>
+//       ) : (
+//         <Box key={index}>
+//           <Column alignitems="center">
+//             {key.icon}
+//             <Text margin="8px 0 0 0" textAlign="center">
+//               {key.text}
+//             </Text>
+//           </Column>
+//         </Box>
+//       )}
+//     </Fragment>
+//   );
+// })}

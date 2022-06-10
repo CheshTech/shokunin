@@ -167,9 +167,11 @@ export const Navigation = () => {
           </Row>
           <NavRow>
             <NavLink to="/">Home</NavLink>
-            <NavLink>About</NavLink>
+
             <NavLink to="/blog">Blog</NavLink>
-            <StyledButton>Get in Contact</StyledButton>
+            <Link style={{ textDecoration: "none" }} to="/contact">
+              <StyledButton>Get in Contact</StyledButton>
+            </Link>
           </NavRow>
         </StyledRow>
       </Wrapper>
@@ -190,3 +192,4 @@ export const Navigation = () => {
     </Fragment>
   );
 };
+// <NavLink>About</NavLink>

@@ -1,7 +1,8 @@
 import React from "react";
 import styled from "styled-components";
-import { Container, Wrapper, Column, Text } from "../theme/index";
+import { Container, Wrapper, Column, Row, Text } from "../theme/index";
 import { Responsive, Colors } from "../theme/styles";
+import { graphql, useStaticQuery } from "gatsby";
 
 const Line = styled.div`
   ${Responsive.sm`
@@ -13,14 +14,14 @@ display: flex;
   // justify-items: space-between;
   // grid-gap: 25px;
   // grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  width: 100%;
+  width: 90%;
   color: ${Colors.offWhite};
   height: 0px;
   border: 2px dashed #fcfcfc;
   margin: 40px auto 100px auto;
 `}
   ${Responsive.lg`
-  margin: 160px auto 250px auto;
+  margin: 160px auto 0px auto;
   `}
 `;
 
@@ -58,20 +59,21 @@ const StyledColumn = styled(Column)`
 margin: 0px 0 0 0;
 `}
   ${Responsive.lg`
-margin: 140px 0 0 0;
+margin: 0px 0 0 0;
+width: 33%;
 `}
 `;
 
 const StyledText = styled(Text)`
   ${Responsive.sm`
-text-align: center;
+text-align: ${props => props.textalign || "center"};
 width: 60%;
 color: ${Colors.white};
 display: none;
 `}
-  ${Responsive.md`
-text-align: center;
-width: 40%;
+  ${Responsive.lg`
+  text-align: ${props => (props.left ? "left" : "center")};
+width: 85%;
 color: ${Colors.white};
 display: inline-block;
 
@@ -96,47 +98,68 @@ color: ${Colors.white};
 font-weight: bold;
 `}
   ${Responsive.lg`
-  margin-bottom: 160px;
+  margin-bottom: 0px;
+`}
+`;
+
+const StyledRow = styled(Row)`
+  ${Responsive.sm`
+display: none;
+`}
+  ${Responsive.lg`
+display: flex;
+margin: 100px 0 100px 0;
+width: 100%;
+justify-content: space-between;
+align-items: center;
 `}
 `;
 
 export const Steps = () => {
+  const data = useStaticQuery(graphql`
+    query {
+      contentfulSteps {
+        step1
+        step2
+        step3
+      }
+    }
+  `);
+
   return (
     <StyledWrapper>
       <Container>
         <TitleText>How it works</TitleText>
-        <Line>
-          <StyledColumn alignitems="flex-start">
-            <CircleWrapper>1</CircleWrapper>
-
-            <StyledText>
-              <strong>Step 1:</strong> Description goes here for info
-            </StyledText>
-          </StyledColumn>
-          <StyledColumn alignitems="center">
-            <CircleWrapper>2</CircleWrapper>
-            <StyledText>
-              <strong>Step 2:</strong> Description goes here for info
-            </StyledText>
-          </StyledColumn>
-          <StyledColumn alignitems="flex-end">
-            <CircleWrapper>3</CircleWrapper>
-            <StyledText>
-              <strong>Step 3:</strong> Description goes here for info
-            </StyledText>
-          </StyledColumn>
-        </Line>
+        <Column>
+          <Line>
+            <StyledColumn alignitems="flex-start">
+              <CircleWrapper>1</CircleWrapper>
+            </StyledColumn>
+            <StyledColumn alignitems="center">
+              <CircleWrapper>2</CircleWrapper>
+            </StyledColumn>
+            <StyledColumn alignitems="flex-end">
+              <CircleWrapper>3</CircleWrapper>
+            </StyledColumn>
+          </Line>
+          <StyledRow>
+            <Column alignitems="flex-start" width="33%">
+              <StyledText left>{data.contentfulSteps.step1}</StyledText>
+            </Column>
+            <Column alignitems="center" width="33%">
+              <StyledText left>{data.contentfulSteps.step2}</StyledText>
+            </Column>
+            <Column alignitems="flex-end" width="33%">
+              <StyledText>{data.contentfulSteps.step3}</StyledText>
+            </Column>
+          </StyledRow>
+        </Column>
         <MobileTextColumn>
-          <Text white>
-            {" "}
-            <strong>Step 1:</strong> Description goes here for info
-          </Text>
+          <Text white> {data.contentfulSteps.step1}</Text>
           <Text margin="10px 0 10px 0" white>
-            <strong>Step 2:</strong> Description goes here for info
+            {data.contentfulSteps.step2}
           </Text>
-          <Text white>
-            <strong>Step 3:</strong> Description goes here for info
-          </Text>
+          <Text white>{data.contentfulSteps.step3}</Text>
         </MobileTextColumn>
       </Container>
     </StyledWrapper>

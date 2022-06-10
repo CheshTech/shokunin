@@ -10,6 +10,7 @@ import {
 } from "../theme/index";
 import { Responsive, Colors } from "../theme/styles";
 import { StaticImage } from "gatsby-plugin-image";
+import { graphql, useStaticQuery, Link } from "gatsby";
 
 const Grid = styled.div`
   ${Responsive.sm`
@@ -39,29 +40,49 @@ const TextColumn = styled.div`
 `;
 
 export const BlogGrid = ({ type }) => {
-  const data = [
-    {
-      title: "Article Name",
-      date: "Date",
-      excerpt:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat…. ",
-      btn: "Read More"
-    },
-    {
-      title: "Article Name",
-      date: "Date",
-      excerpt:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat…. ",
-      btn: "Read More"
-    },
-    {
-      title: "Article Name",
-      date: "Date",
-      excerpt:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat…. ",
-      btn: "Read More"
+  const data = useStaticQuery(graphql`
+    query {
+      allContentfulBlog {
+        nodes {
+          slug
+          excerpt
+          title
+          article {
+            raw
+          }
+          image {
+            gatsbyImageData
+          }
+        }
+      }
     }
-  ];
+  `);
+  // const data = [
+  //   {
+  //     title: "Article Name",
+  //     date: "Date",
+  //     excerpt:
+  //       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat…. ",
+  //     btn: "Read More"
+  //   },
+  //   {
+  //     title: "Article Name",
+  //     date: "Date",
+  //     excerpt:
+  //       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat…. ",
+  //     btn: "Read More"
+  //   },
+  //   {
+  //     title: "Article Name",
+  //     date: "Date",
+  //     excerpt:
+  //       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat…. ",
+  //     btn: "Read More"
+  //   }
+  // ];
+  // console.log(data.allContentfulBlog.nodes, "ANAKIN");
+
+  // const { blogPosts } = data.allContentfulBlog.edges[0].node;
 
   return (
     <Wrapper>
@@ -69,44 +90,80 @@ export const BlogGrid = ({ type }) => {
         <Column alignitems="center">
           <Subtitle>Blog Posts</Subtitle>
           <Grid>
-            {data.map((key, index) => {
+            {data.allContentfulBlog.nodes.map((key, index) => {
               return (
                 <BlogWrapper key={index}>
-                  <StaticImage
-                    src="../images/splashhero.jpg"
-                    alt="Health without apologies"
-                    placeholder="blurred"
-                  />
-                  <TextColumn>
-                    <Text fontweight="bold" white>
-                      {key.title}
-                    </Text>
-                    <Text margin="8px 0 24px 0" fontweight="bold" white>
-                      {key.date}
-                    </Text>
-                    <Text white>{key.excerpt}</Text>
-                    <Text
-                      style={{ cursor: "pointer" }}
-                      fontweight="bold"
-                      white
-                      margin="8px 0 0 0"
-                      textAlign="right"
+                  {type === "blog" && (
+                    <Link to={`${key.slug}`} style={{ textDecoration: "none" }}>
+                      <StaticImage
+                        src="../images/splashhero.jpg"
+                        alt="Health without apologies"
+                        placeholder="blurred"
+                      />
+                      <TextColumn>
+                        <Text fontweight="bold" white>
+                          {key.title}
+                        </Text>
+                        <Text margin="8px 0 24px 0" fontweight="bold" white>
+                          {key.date}
+                        </Text>
+                        <Text white>{key.excerpt}</Text>
+                        <Text
+                          style={{ cursor: "pointer" }}
+                          fontweight="bold"
+                          white
+                          margin="8px 0 0 0"
+                          textAlign="right"
+                        >
+                          Read More
+                        </Text>
+                      </TextColumn>
+                    </Link>
+                  )}
+                  {type !== "blog" && (
+                    <Link
+                      to={`blog/${key.slug}`}
+                      style={{ textDecoration: "none" }}
                     >
-                      {key.btn}
-                    </Text>
-                  </TextColumn>
+                      <StaticImage
+                        src="../images/splashhero.jpg"
+                        alt="Health without apologies"
+                        placeholder="blurred"
+                      />
+                      <TextColumn>
+                        <Text fontweight="bold" white>
+                          {key.title}
+                        </Text>
+                        <Text margin="8px 0 24px 0" fontweight="bold" white>
+                          {key.date}
+                        </Text>
+                        <Text white>{key.excerpt}</Text>
+                        <Text
+                          style={{ cursor: "pointer" }}
+                          fontweight="bold"
+                          white
+                          margin="8px 0 0 0"
+                          textAlign="right"
+                        >
+                          Read More
+                        </Text>
+                      </TextColumn>
+                    </Link>
+                  )}
                 </BlogWrapper>
               );
             })}
           </Grid>
           {type !== "blog" && (
-            <Button
-              margin="60px 0 0 0"
-              color={Colors.white}
-              background={Colors.red}
-            >
-              More Posts
-            </Button>
+            <Link to="/blog" style={{ textDecoration: "none" }}>
+              <Button
+                margin="60px 0 0 0"
+                color={Colors.white}
+                background={Colors.red}
+              >
+                More Posts
+              </Button>
+            </Link>
           )}
         </Column>
       </Container>

@@ -2,7 +2,8 @@ import React from "react";
 import styled from "styled-components";
 import { Container, Wrapper, Column, Text } from "../theme/index";
 import { Colors, Responsive } from "../theme/styles";
-import { StaticImage } from "gatsby-plugin-image";
+import { graphql, useStaticQuery } from "gatsby";
+import { getImage, GatsbyImage, StaticImage } from "gatsby-plugin-image";
 import { ContactForm } from "../components/index";
 
 const Grid = styled.div`
@@ -49,6 +50,19 @@ margin-top: 60px;
 `;
 
 export const Footer = () => {
+  const data = useStaticQuery(graphql`
+    query {
+      contentfulFooter {
+        email
+        website
+        phone
+        logo {
+          gatsbyImageData
+        }
+      }
+    }
+  `);
+
   return (
     <Wrapper red style={{ paddingBottom: "0" }}>
       <Container>
@@ -60,9 +74,9 @@ export const Footer = () => {
               placeholder="blurred"
             />
             <TextColumn>
-              <Text white>Email@goeshere.com</Text>
-              <Text white>(123) 456-7890</Text>
-              <Text white>shokunin.com</Text>
+              <Text white>{data.contentfulFooter.email}</Text>
+              <Text white>{data.contentfulFooter.phone}</Text>
+              <Text white>{data.contentfulFooter.website}</Text>
             </TextColumn>
           </ContentColumn>
           <StyledColumn>
@@ -89,3 +103,10 @@ export const Footer = () => {
     </Wrapper>
   );
 };
+// <GatsbyImage
+//               image={getImage(
+//                 {data.contentfulFooter.logo.gatsbyImageData
+//               )}
+//               alt="Shokunin"
+//               placeholder="blurred"
+//             />

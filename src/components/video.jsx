@@ -48,14 +48,20 @@ export const Video = () => {
       <Container>
         <Grid>
           <StyledColumn>
-            <StaticImage
-              src="../images/fitnessfood.jpg"
-              alt="Health without apologies"
-              placeholder="blurred"
-            />
+            <iframe
+              width="100%"
+              height="400px"
+              src="https://www.youtube.com/embed/_EZCG2Ex8Q0?clip=UgkxFxqNqcBNXxpWr0Dm4eRDR8DxKudagFjc&amp;clipt=ENu4BhiqjAg"
+              title="YouTube video player"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen
+            ></iframe>
           </StyledColumn>
           <Column alignitems="flex-start">
-            <Text white>This is to be the quote from the video excerpt</Text>
+            <Text white style={{ fontStyle: "italic" }}>
+              "Nothing is Written"
+            </Text>
             <Text white>-Lawerence of Arabia</Text>
           </Column>
         </Grid>

@@ -3,7 +3,8 @@ import styled from "styled-components";
 import { Container, Wrapper, Column } from "../theme/index";
 import { ContactForm } from "./contactform";
 import { Responsive, Colors } from "../theme/styles";
-import { StaticImage } from "gatsby-plugin-image";
+import { graphql, useStaticQuery } from "gatsby";
+import { getImage, GatsbyImage } from "gatsby-plugin-image";
 
 const StyledColumn = styled(Column)`
   ${Responsive.sm`
@@ -43,16 +44,27 @@ display: none;
 `;
 
 export const ContactSection = () => {
+  const data = useStaticQuery(graphql`
+    query {
+      contentfulContactImage {
+        image {
+          gatsbyImageData
+        }
+      }
+    }
+  `);
+
   return (
     <Wrapper>
       <Container>
         <ImageGrid>
           <Column className="top-image">
-            <StaticImage
-              src="../images/fitnessfood.jpg"
-              alt="Health without apologies"
+            <GatsbyImage
+              image={getImage(
+                data.contentfulContactImage.image.gatsbyImageData
+              )}
+              alt="Shokunin"
               placeholder="blurred"
-              style={{ borderRadius: "10px" }}
             />
           </Column>
           <Column className="bottom-image">

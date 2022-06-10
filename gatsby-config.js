@@ -12,6 +12,13 @@ module.exports = {
     "gatsby-plugin-react-helmet",
     "gatsby-plugin-sitemap",
     {
+      resolve: `gatsby-source-contentful`,
+      options: {
+        spaceId: `g0dv39pxgsly`,
+        accessToken: `k2nzefB07E3cLvL5VLUWikS55m2jJu3usR6E_Tc6EsE`
+      }
+    },
+    {
       resolve: "gatsby-plugin-manifest",
       options: {
         icon: "src/images/icon.png"
