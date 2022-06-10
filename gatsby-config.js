@@ -1,3 +1,7 @@
+require("dotenv").config({
+  path: `.env.${process.env.NODE_ENV}`
+});
+
 module.exports = {
   siteMetadata: {
     title: `BoKing Performance Fitness: Optimize Your Physical Capabilities`,
@@ -14,8 +18,8 @@ module.exports = {
     {
       resolve: `gatsby-source-contentful`,
       options: {
-        spaceId: `g0dv39pxgsly`,
-        accessToken: `k2nzefB07E3cLvL5VLUWikS55m2jJu3usR6E_Tc6EsE`
+        spaceId: process.env.CONTENTFUL_SPACE_ID,
+        accessToken: process.env.CONTENTFUL_ACCESS_TOKEN
       }
     },
     {
