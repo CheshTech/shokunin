@@ -4,9 +4,9 @@ require("dotenv").config({
 
 module.exports = {
   siteMetadata: {
-    title: `BoKing Performance Fitness: Optimize Your Physical Capabilities`,
-    description: `Seattle personal training for athletes including boxing, basketball, and group workouts for kids and adults.`,
-    author: `@Jon Bolden`,
+    title: `Roland Gomez: Tampa's Premiere Literature, Wine, Dining, and Behaviorial Economics Writer.`,
+    description: `Tampa writer. Literature, wine, dining, and behaviorial economics`,
+    author: `@Roland Gomez`,
     siteUrl: `https://bokingperformancefitness.com/`
   },
   plugins: [
@@ -25,7 +25,7 @@ module.exports = {
     {
       resolve: "gatsby-plugin-manifest",
       options: {
-        icon: "src/images/icon.png"
+        icon: "src/images/shokuninsymbol.png"
       }
     },
     "gatsby-plugin-sharp",
