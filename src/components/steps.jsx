@@ -38,7 +38,7 @@ const CircleWrapper = styled.div`
     /* UI Properties */
     background: ${Colors.offWhite};
     box-shadow: 0px 3px 8px ${Colors.blue};
-    font: normal normal normal 40px/48px Seven Swordsmen BB;
+    font: normal normal normal 40px/48px Reggae One;
     letter-spacing: 4px;
     color: ${Colors.blue};
     `}

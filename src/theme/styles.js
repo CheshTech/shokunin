@@ -15,7 +15,8 @@ export const Fonts = {
   raleway: `Allerta Stencil, sans-serif`,
   // montserrat: 'Playfair Display, serif',
   montserrat: `Montserrat, sans-serif`,
-  swordsmen: `Seven Swordsmen BB, sans-serif`,
+  // swordsmen: `Seven Swordsmen BB, sans-serif`,
+  swordsmen: `Reggae One, cursive`,
   proxima: `Proxima Nova, sans-serif`
 };
 
