@@ -159,7 +159,7 @@ export const HeroSplash = ({ title, type, subtitle, btnText, text }) => {
                 )}
                 alt="Health without apologies"
                 placeholder="blurred"
-                className={styles.symbol}
+                // className={styles.symbol}
                 // style={{
                 //   width: "150px",
                 //   height: "75px",
